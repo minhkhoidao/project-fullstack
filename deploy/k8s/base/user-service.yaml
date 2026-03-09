@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: fashion-user
+  namespace: fashion
+  labels:
+    app: fashion-user
+    app.kubernetes.io/part-of: fashion-ecommerce
+spec:
+  type: ClusterIP
+  selector:
+    app: fashion-user
+  ports:
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP

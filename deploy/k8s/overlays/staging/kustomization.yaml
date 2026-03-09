@@ -1,0 +1,107 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: fashion-staging
+
+namePrefix: staging-
+
+resources:
+  - ../../base
+
+patches:
+  # Scale all services to 1 replica for staging
+  - target:
+      kind: Deployment
+      name: fashion-gateway
+    patch: |
+      - op: replace
+        path: /spec/replicas
+        value: 1
+  - target:
+      kind: Deployment
+      name: fashion-user
+    patch: |
+      - op: replace
+        path: /spec/replicas
+        value: 1
+  - target:
+      kind: Deployment
+      name: fashion-product
+    patch: |
+      - op: replace
+        path: /spec/replicas
+        value: 1
+  - target:
+      kind: Deployment
+      name: fashion-cart
+    patch: |
+      - op: replace
+        path: /spec/replicas
+        value: 1
+  - target:
+      kind: Deployment
+      name: fashion-order
+    patch: |
+      - op: replace
+        path: /spec/replicas
+        value: 1
+  - target:
+      kind: Deployment
+      name: fashion-payment
+    patch: |
+      - op: replace
+        path: /spec/replicas
+        value: 1
+  - target:
+      kind: Deployment
+      name: fashion-inventory
+    patch: |
+      - op: replace
+        path: /spec/replicas
+        value: 1
+  - target:
+      kind: Deployment
+      name: fashion-notification
+    patch: |
+      - op: replace
+        path: /spec/replicas
+        value: 1
+  - target:
+      kind: Deployment
+      name: fashion-review
+    patch: |
+      - op: replace
+        path: /spec/replicas
+        value: 1
+  - target:
+      kind: Deployment
+      name: fashion-admin
+    patch: |
+      - op: replace
+        path: /spec/replicas
+        value: 1
+  - target:
+      kind: Deployment
+      name: fashion-web
+    patch: |
+      - op: replace
+        path: /spec/replicas
+        value: 1
+
+  # Staging ConfigMap overrides
+  - target:
+      kind: ConfigMap
+      name: fashion-config
+    patch: |
+      - op: replace
+        path: /data/LOG_LEVEL
+        value: "debug"
+      - op: replace
+        path: /data/DATABASE_URL
+        value: "postgres://fashion:$(DATABASE_PASSWORD)@fashion-postgres.fashion-staging.svc.cluster.local:5432/fashion_staging?sslmode=require"
+      - op: replace
+        path: /data/REDIS_URL
+        value: "redis://fashion-redis.fashion-staging.svc.cluster.local:6379"
+      - op: replace
+        path: /data/KAFKA_BROKERS
+        value: "fashion-kafka-0.fashion-kafka.fashion-staging.svc.cluster.local:9092"

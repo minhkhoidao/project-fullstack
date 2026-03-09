@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fashion-web
+  namespace: fashion
+  labels:
+    app: fashion-web
+    app.kubernetes.io/part-of: fashion-ecommerce
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: fashion-web
+  template:
+    metadata:
+      labels:
+        app: fashion-web
+    spec:
+      containers:
+        - name: web
+          image: fashion-ecommerce/web:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: NEXT_PUBLIC_API_URL
+              value: "http://fashion-gateway.fashion.svc.cluster.local:8080"
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10

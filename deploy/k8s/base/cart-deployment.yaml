@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fashion-cart
+  namespace: fashion
+  labels:
+    app: fashion-cart
+    app.kubernetes.io/part-of: fashion-ecommerce
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: fashion-cart
+  template:
+    metadata:
+      labels:
+        app: fashion-cart
+    spec:
+      containers:
+        - name: cart
+          image: fashion-ecommerce/cart:latest
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: fashion-config
+            - secretRef:
+                name: fashion-secret
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "50m"
+            limits:
+              memory: "256Mi"
+              cpu: "200m"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10

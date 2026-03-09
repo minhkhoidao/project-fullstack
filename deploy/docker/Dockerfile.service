@@ -1,0 +1,20 @@
+FROM golang:1.24-alpine AS builder
+
+ARG SERVICE
+
+WORKDIR /app
+
+COPY go.mod go.sum ./
+RUN go mod download
+
+COPY . .
+RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o /app/service ./cmd/${SERVICE}
+
+FROM gcr.io/distroless/static-debian12:nonroot
+
+COPY --from=builder /app/service /service
+COPY --from=builder /app/migrations /migrations
+
+USER nonroot:nonroot
+EXPOSE 8080
+ENTRYPOINT ["/service"]

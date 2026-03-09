@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: fashion-notification
+  namespace: fashion
+  labels:
+    app: fashion-notification
+    app.kubernetes.io/part-of: fashion-ecommerce
+spec:
+  type: ClusterIP
+  selector:
+    app: fashion-notification
+  ports:
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP

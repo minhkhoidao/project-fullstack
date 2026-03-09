@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fashion-config
+  namespace: fashion
+  labels:
+    app.kubernetes.io/part-of: fashion-ecommerce
+data:
+  DATABASE_URL: "postgres://fashion:$(DATABASE_PASSWORD)@fashion-postgres.fashion.svc.cluster.local:5432/fashion?sslmode=require"
+  REDIS_URL: "redis://fashion-redis.fashion.svc.cluster.local:6379"
+  KAFKA_BROKERS: "fashion-kafka-0.fashion-kafka.fashion.svc.cluster.local:9092,fashion-kafka-1.fashion-kafka.fashion.svc.cluster.local:9092,fashion-kafka-2.fashion-kafka.fashion.svc.cluster.local:9092"
+  LOG_LEVEL: "info"
+  GATEWAY_URL: "http://fashion-gateway.fashion.svc.cluster.local:8080"
+  USER_SERVICE_URL: "http://fashion-user.fashion.svc.cluster.local:8080"
+  PRODUCT_SERVICE_URL: "http://fashion-product.fashion.svc.cluster.local:8080"
+  CART_SERVICE_URL: "http://fashion-cart.fashion.svc.cluster.local:8080"
+  ORDER_SERVICE_URL: "http://fashion-order.fashion.svc.cluster.local:8080"
+  PAYMENT_SERVICE_URL: "http://fashion-payment.fashion.svc.cluster.local:8080"
+  INVENTORY_SERVICE_URL: "http://fashion-inventory.fashion.svc.cluster.local:8080"
+  NOTIFICATION_SERVICE_URL: "http://fashion-notification.fashion.svc.cluster.local:8080"
+  REVIEW_SERVICE_URL: "http://fashion-review.fashion.svc.cluster.local:8080"
+  ADMIN_SERVICE_URL: "http://fashion-admin.fashion.svc.cluster.local:8080"
